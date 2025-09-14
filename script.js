@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Simple image lazy loading effect
     lazyLoadImages();
+    
+    // Initialize gallery modal if on gallery page
+    initGalleryModal();
 });
 
 // Update active navigation link
@@ -19,8 +22,7 @@ function updateActiveNavLink() {
     navLinks.forEach(link => {
         const href = link.getAttribute('href');
         if (href === currentPage || (currentPage === '' && href === 'index.html')) {
-            link.style.color = '#007bff';
-            link.style.fontWeight = '600';
+            link.style.color = '#4A90E2';
         }
     });
 }
@@ -49,8 +51,6 @@ function lazyLoadImages() {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const container = entry.target;
-                // When you add real images, replace the placeholder text
-                // with actual img elements here
                 observer.unobserve(container);
             }
         });
@@ -61,15 +61,102 @@ function lazyLoadImages() {
     });
 }
 
-// Add click handlers for project links (to handle any special behavior)
+// Gallery Modal Functionality
+function initGalleryModal() {
+    const modal = document.getElementById('galleryModal');
+    if (!modal) return; // Exit if not on gallery page
+    
+    const modalImage = document.getElementById('modalImage');
+    const modalCaption = document.querySelector('.modal-caption');
+    const modalCounter = document.querySelector('.modal-counter');
+    const closeBtn = document.querySelector('.modal-close');
+    const prevBtn = document.querySelector('.modal-prev');
+    const nextBtn = document.querySelector('.modal-next');
+    
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    let currentIndex = 0;
+    
+    galleryItems.forEach((item, index) => {
+        item.style.cursor = 'pointer';
+        item.addEventListener('click', () => {
+            openModal(index);
+        });
+    });
+    
+    // Open modal function
+    function openModal(index) {
+        currentIndex = index;
+        const item = galleryItems[index];
+        const img = item.querySelector('.gallery-image');
+        const caption = item.querySelector('.gallery-caption');
+        
+        modalImage.src = img.src;
+        modalImage.alt = img.alt;
+        modalCaption.textContent = caption.textContent;
+        modalCounter.textContent = `${index + 1} / ${galleryItems.length}`;
+        
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    // Close modal function
+    function closeModal() {
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+    
+    // Navigate to previous image
+    function prevImage() {
+        currentIndex = currentIndex > 0 ? currentIndex - 1 : galleryItems.length - 1;
+        openModal(currentIndex);
+    }
+    
+    // Navigate to next image
+    function nextImage() {
+        currentIndex = currentIndex < galleryItems.length - 1 ? currentIndex + 1 : 0;
+        openModal(currentIndex);
+    }
+    
+    // Event listeners
+    closeBtn.addEventListener('click', closeModal);
+    prevBtn.addEventListener('click', prevImage);
+    nextBtn.addEventListener('click', nextImage);
+    
+    // Close modal when clicking outside the image
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+    
+    // Keyboard navigation for modal
+    document.addEventListener('keydown', (e) => {
+        if (modal.classList.contains('active')) {
+            switch(e.key) {
+                case 'Escape':
+                    closeModal();
+                    break;
+                case 'ArrowLeft':
+                    prevImage();
+                    break;
+                case 'ArrowRight':
+                    nextImage();
+                    break;
+            }
+        }
+    });
+    
+    // Prevent image dragging
+    modalImage.addEventListener('dragstart', (e) => {
+        e.preventDefault();
+    });
+}
+
 document.querySelectorAll('.project-link').forEach(link => {
     link.addEventListener('click', function(e) {
-        // You can add analytics tracking here if needed
-        // e.g., track which projects get the most clicks
     });
 });
 
-// Simple form validation if you add contact forms later
 function validateForm(formElement) {
     const inputs = formElement.querySelectorAll('input[required], textarea[required]');
     let isValid = true;
@@ -111,4 +198,4 @@ document.addEventListener('keydown', function(e) {
 document.querySelector('.fixed-name').addEventListener('click', e => {
     e.preventDefault();
     window.location.href = 'index.html';
-  });
+});
