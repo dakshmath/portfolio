@@ -12,13 +12,14 @@ body {
     min-height: 100vh;
 }
 
-/* Navigation */
+/* Navigation - REMOVED ABSOLUTE POSITIONING FOR BETTER FLOW */
 .navbar {
-    position: absolute;
+    position: static; /* Changed from absolute for better mobile flow */
     top: 0;
     right: 0;
     padding: 2rem;
     z-index: 1000;
+    width: 100%; /* Ensure it takes full width */
 }
 
 .nav-links {
@@ -26,6 +27,7 @@ body {
     gap: 2rem;
     align-items: center;
     position: relative;
+    justify-content: flex-end; /* Align to the right on desktop */
 }
 
 .nav-link {
@@ -43,6 +45,7 @@ body {
     font-weight: 500;
 }
 
+/* RESTORING DOTS - DESKTOP */
 .nav-link:not(:last-child)::after {
     content: "•";
     position: absolute;
@@ -55,6 +58,23 @@ body {
 }
 
 .nav-link:hover {
+    color: #4A90E2;
+}
+
+/* Fixed Name - Desktop/Page Name */
+.fixed-name {
+    position: absolute;
+    top: 2rem;
+    left: 3rem;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #2C3E50;
+    z-index: 1100;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+}
+.fixed-name:hover {
     color: #4A90E2;
 }
 
@@ -90,8 +110,6 @@ body {
     border: 3px solid #4A90E2;
 }
   
-
-
 .hero-name {
     font-size: 4rem;
     font-weight: 700;
@@ -281,6 +299,18 @@ body {
     .experience-image {
         width: 90%;
         height: auto;
+    }
+
+    /* FIX: Remove horizontal margin and use padding for content */
+    .experience-content {
+        text-align: left;
+        padding: 0 5%; /* Use percentage padding for better scaling */
+        margin-right: 0; 
+        max-width: 100%; /* Ensure it uses max space */
+    }
+    
+    .experience-content h3 {
+        margin-right: 0; 
     }
 
     .experience-content p {
@@ -506,92 +536,6 @@ body {
     color: #999;
     font-size: 0.8rem;
     text-align: center;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .navbar {
-        position: static;
-        padding: 1rem;
-        text-align: center;
-    }
-    
-    .nav-links {
-        justify-content: center;
-        gap: 1rem;
-    }
-    
-    .hero-name {
-        font-size: 2.5rem;
-    }
-    
-    .hero-description {
-        font-size: 1.1rem;
-    }
-    
-    .page-title {
-        font-size: 2rem;
-    }
-    
-    .experience-item {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .experience-image {
-        width: 100%;
-        height: 200px;
-    }
-    
-    .project-header {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .project-image {
-        width: 100%;
-        height: 200px;
-    }
-    
-    .page-container {
-        padding: 4rem 1rem;
-    }
-    
-    .logo-showcase {
-        margin: 1rem 0;
-        padding: 1.5rem;
-    }
-    
-    .logos-image {
-        max-height: 200px;
-    }
-    
-    .logo-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1rem;
-    }
-    
-    .logo-item {
-        width: 80px;
-        height: 60px;
-        padding: 0.5rem;
-    }
-}
-
-.fixed-name {
-    position: absolute;
-    top: 2rem;
-    left: 3rem;
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: #2C3E50;
-    z-index: 1100;
-    text-decoration: none;
-    cursor: pointer;
-    user-select: none;
-}
-.fixed-name:hover {
-    color: #4A90E2;
 }
 
 /* Gallery Page */
@@ -826,4 +770,118 @@ body {
     font-size: 1.0rem;
     margin: 0;
     opacity: 0.8;
+}
+
+/* ========================================================= */
+/* UPDATED MOBILE DESIGN                     */
+/* ========================================================= */
+
+@media (max-width: 768px) {
+    
+    /* FIX 1: Navigation and Name Positioning */
+    .navbar {
+        position: static;
+        padding: 1rem 0; /* Reduced vertical padding */
+        text-align: center;
+        border-bottom: 1px solid #ddd; /* Added separator */
+    }
+    
+    .fixed-name {
+        position: static; /* Flows in the document on mobile */
+        text-align: center;
+        margin: 0 0 0.5rem 0; /* Adjusted margin to fit better */
+        font-size: 1.5rem; /* Slightly larger name on mobile */
+        width: 100%;
+        padding: 0 1rem;
+    }
+    
+    .nav-links {
+        justify-content: center;
+        gap: 1rem; /* Adjusted gap to show dot better */
+        padding: 0 1rem;
+        flex-wrap: wrap; 
+    }
+
+    /* FIX 1.1: Restore the dot on mobile, but make it less intrusive */
+    .nav-link:not(:last-child)::after {
+        content: "•"; /* RESTORED DOT */
+        right: -0.6rem; /* Adjusted position to account for smaller gap */
+        font-size: 0.8rem;
+    }
+    
+    .hero-name {
+        font-size: 2.5rem;
+    }
+    
+    .hero-description {
+        font-size: 1.1rem;
+    }
+    
+    .page-title {
+        font-size: 2rem;
+    }
+    
+    /* FIX 3: Adjust page-container padding to account for static nav */
+    .page-container {
+        padding: 2rem 1rem 4rem; /* Reduced top padding */
+    }
+
+    /* FIX 2: Journey/Experience Items - Closing the Gap */
+    .experience-item {
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 2rem; /* Reduced spacing between items */
+    }
+    
+    .experience-image {
+        width: 90%;
+        height: auto;
+    }
+
+    /* FIX 2.1: Use simple padding and remove restrictive margins/max-widths */
+    .experience-content {
+        text-align: left; /* Ensure content text aligns left for readability */
+        padding: 0 5%; /* Use percentage padding for better scaling */
+        margin: 0; /* Remove external margins causing gaps */
+        max-width: 100%; /* Ensure it uses max space */
+    }
+
+    .experience-content h3 {
+        margin-right: 0;
+    }
+    
+    .experience-content p {
+        max-width: 100%;
+        font-size: 0.95rem;
+    }
+    
+    .project-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .project-image {
+        width: 100%;
+        height: 200px;
+    }
+    
+    .logo-showcase {
+        margin: 1rem 0;
+        padding: 1.5rem;
+    }
+    
+    .logos-image {
+        max-height: 200px;
+    }
+    
+    .logo-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+    }
+    
+    .logo-item {
+        width: 80px;
+        height: 60px;
+        padding: 0.5rem;
+    }
 }
